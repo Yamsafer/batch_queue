@@ -1,0 +1,5 @@
+-- Up
+CREATE TABLE IF NOT EXISTS batch_queue (id TEXT UNIQUE NOT NULL, data TEXT, added INTEGER PRIMARY KEY AUTOINCREMENT);
+
+-- Down
+DROP TABLE batch_queue

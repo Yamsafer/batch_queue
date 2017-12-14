@@ -1,0 +1,30 @@
+{
+  "name": "batch_queue",
+  "version": "1.0.0",
+  "description": "A queue for pushing tasks and then executing them in batches when needed. This is mostly helpful for cases where you want to accumulate items in one process and act on them in batches in a different process. For example, let's say you want to accumulate records that you want to later insert them in batches into a DB to reduce traffic/cost/...  ",
+  "main": "BatchQueue.js",
+  "scripts": {
+    "test": "node test/consumer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yamsafer/batch_queue.git"
+  },
+  "keywords": [
+    "queue",
+    "batch",
+    "process",
+    "task",
+    "tasks",
+    "job",
+    "sqlite",
+    "push",
+    "pop"
+  ],
+  "author": "mtaweel <taweel@yamsafer.me> (https://www.yamsafer.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Yamsafer/batch_queue/issues"
+  },
+  "homepage": "https://github.com/Yamsafer/batch_queue#readme"
+}
