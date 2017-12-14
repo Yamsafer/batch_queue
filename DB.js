@@ -1,11 +1,12 @@
 const sqlite = require('sqlite')
+const path = require('path')
 
 class DB {
 
 	constructor(dbPath) {
 		this.dbPromise = sqlite.open(dbPath, { Promise })
 		// .then(db => db.migrate({force: 'last'}))
-		.then(db => db.migrate({migrationsPath: './migrations'}))
+		.then(db => db.migrate({migrationsPath: path.join(__dirname, 'migrations')}))
 	}
 
 	/**
