@@ -26,5 +26,9 @@
   "bugs": {
     "url": "https://github.com/Yamsafer/batch_queue/issues"
   },
-  "homepage": "https://github.com/Yamsafer/batch_queue#readme"
+  "homepage": "https://github.com/Yamsafer/batch_queue#readme",
+  "dependencies": {
+    "sqlite": "^2.9.0",
+    "uniqid": "^4.1.1"
+  }
 }
