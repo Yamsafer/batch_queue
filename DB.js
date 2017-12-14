@@ -5,7 +5,7 @@ class DB {
 	constructor(dbPath) {
 		this.dbPromise = sqlite.open(dbPath, { Promise })
 		// .then(db => db.migrate({force: 'last'}))
-		.then(db => db.migrate())
+		.then(db => db.migrate({migrationsPath: './migrations'}))
 	}
 
 	/**
