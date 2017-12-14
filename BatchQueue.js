@@ -17,7 +17,7 @@ class BatchQueue {
 			return acc.then(() => db.push(entry))
 		}, Promise.resolve())
 		.then(() => {
-			db.close().then(() => return "done")
+			db.close().then(() =>  "done")
 		})
 	}
 
