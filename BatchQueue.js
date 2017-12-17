@@ -1,4 +1,6 @@
 const DB = require('./db')
+const uniqid = require('uniqid')
+const schedule = require('node-schedule')
 
 class BatchQueue {
 
@@ -14,7 +16,12 @@ class BatchQueue {
 	push(batch) {
 		const db = new DB(this.path)
 		return batch.reduce((acc, entry) => {
-			return acc.then(() => db.push(entry))
+			return acc.then(() => db.push(
+				{
+					id: uniqid(),
+					data: entry
+				}
+			))
 		}, Promise.resolve())
 		.then(() => {
 			db.close().then(() =>  "done")
@@ -47,6 +54,35 @@ class BatchQueue {
 		})
 		.then(results => {
 			return db.close().then(() => results)
+		})
+		.catch(err => {
+			return db.close().then(() => {
+				throw err
+			})
+		})
+	}
+
+	/**
+	 * Schedule a given job (asyncJob) to run every given number of
+	 * mintues on a batch of items defined by (forBatchCount) 
+	 * that is poped from the queue if the asyncJob succeeds
+	 * @param  {[type]} asyncJob      [description]
+	 * @param  {[type]} forBatchCount [description]
+	 * @param  {[type]} everyMins     [description]
+	 * @param  {[type]} onSuccess     [description]
+	 * @param  {[type]} onFail        [description]
+	 * @return {[type]}               [description]
+	 */
+	schedule(asyncJob, forBatchCount, everyMins, onSuccess, onFail) {
+		schedule.scheduleJob(`*/${everyMins} * * * *`, () => {
+			this.pop(forBatchCount, asyncJob)
+			.then(results => {
+				onSuccess(results)
+			})
+			.catch(err => {
+				console.log(err)
+				onFail(err)
+			})
 		})
 	}
 

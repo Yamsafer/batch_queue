@@ -2,12 +2,16 @@ const BatchQueue = require('../BatchQueue')
 
 const queue = new BatchQueue('./database.sqlite')
 
-queue.pop(100, heavyDutyJob)
-.then(items => {
-	console.log(items)
+queue.schedule(heavyDutyJob, 5, 1, (results) => {
+	console.log(results)
+}, (err) => {
+	console.log(err)
 })
 
-
+// queue.pop(100, heavyDutyJob)
+// .then(items => {
+// 	console.log(items)
+// })
 
 
 function heavyDutyJob(results) {
