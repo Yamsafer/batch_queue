@@ -46,8 +46,8 @@ class BatchQueue {
 	pop(count, asyncJob) {
 		return this.db.get(count)
 		.then(results => {
-			// execute the batch job on the results
-			return asyncJob(results)
+			// execute the batch job on the data
+			return asyncJob(results.map(entry => entry.data))
 			.then(() => {
 				return results
 			})

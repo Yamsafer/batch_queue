@@ -1,6 +1,6 @@
 const queue = require('../BatchQueue').getSharedInstance('./database.sqlite')
 
-queue.schedule(heavyDutyJob, 100, 1, (results) => {
+queue.schedule(heavyDutyJob, 10, 1, (results) => {
 	console.log(results)
 }, (err) => {
 	console.log(err)
@@ -16,7 +16,7 @@ function heavyDutyJob(results) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			results.forEach((entry) => {
-				console.log(entry.data)
+				console.log(entry)
 			})
 			resolve("done")
 		}, 2000)
