@@ -1,8 +1,6 @@
-const BatchQueue = require('../BatchQueue')
+const queue = require('../BatchQueue').getSharedInstance('./database.sqlite')
 
-const queue = new BatchQueue('./database.sqlite')
-
-queue.schedule(heavyDutyJob, 5, 1, (results) => {
+queue.schedule(heavyDutyJob, 100, 1, (results) => {
 	console.log(results)
 }, (err) => {
 	console.log(err)

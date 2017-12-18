@@ -6,7 +6,21 @@ class DB {
 	constructor(dbPath) {
 		this.dbPromise = sqlite.open(dbPath, { Promise })
 		// .then(db => db.migrate({force: 'last'}))
-		.then(db => db.migrate({migrationsPath: path.join(__dirname, 'migrations')}))
+		.then(db => {
+			return db.run('PRAGMA synchronous=OFF;')
+			.then(() => {
+				return db.run('PRAGMA journal_mode=MEMORY;')
+			})
+			.then(() => {
+				db.run('PRAGMA temp_store=MEMORY;')
+			})
+			.then(() => {
+				db.run('PRAGMA busy_timeout = 60000;')
+			})
+			.then(() => {
+				return db.migrate({migrationsPath: path.join(__dirname, 'migrations')})
+			})
+		})
 	}
 
 	/**

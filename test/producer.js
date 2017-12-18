@@ -1,6 +1,4 @@
-const BatchQueue = require('../BatchQueue')
-
-const queue = new BatchQueue('./database.sqlite')
+const queue = require('../BatchQueue').getSharedInstance('./database.sqlite')
 
 const batch = [
 	{udid: '1', timestamp: Date.now()},
@@ -18,3 +16,24 @@ const batch = [
 ]
 
 queue.push(batch)
+
+queue.push([{udid: '100', timestamp: Date.now()}])
+queue.push([{udid: '200', timestamp: Date.now()}])
+queue.push([{udid: '300', timestamp: Date.now()}])
+queue.push([{udid: '400', timestamp: Date.now()}])
+queue.push([{udid: '100', timestamp: Date.now()}])
+queue.push([{udid: '200', timestamp: Date.now()}])
+queue.push([{udid: '300', timestamp: Date.now()}])
+queue.push([{udid: '400', timestamp: Date.now()}])
+queue.push([{udid: '100', timestamp: Date.now()}])
+queue.push([{udid: '200', timestamp: Date.now()}])
+queue.push([{udid: '300', timestamp: Date.now()}])
+queue.push([{udid: '400', timestamp: Date.now()}])
+queue.push([{udid: '100', timestamp: Date.now()}])
+queue.push([{udid: '200', timestamp: Date.now()}])
+queue.push([{udid: '300', timestamp: Date.now()}])
+queue.push([{udid: '400', timestamp: Date.now()}])
+queue.push([{udid: '100', timestamp: Date.now()}])
+queue.push([{udid: '200', timestamp: Date.now()}])
+queue.push([{udid: '300', timestamp: Date.now()}])
+queue.push([{udid: '400', timestamp: Date.now()}])

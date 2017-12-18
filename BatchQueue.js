@@ -5,18 +5,25 @@ const schedule = require('node-schedule')
 class BatchQueue {
 
 	constructor(dbPath) {
-		this.path = dbPath
+		this.db = new DB(dbPath)
 	}
 
+	static getSharedInstance(dbPath) {
+		if (typeof BatchQueue.instance === 'object') {
+			console.log('singleton')
+        	return BatchQueue.instance
+        }
+        BatchQueue.instance = new BatchQueue(dbPath)
+        return BatchQueue.instance
+	}
 	/**
 	 * add an array of items to the end of the queue
 	 * @param  {[type]} batch [description]
 	 * @return {[type]}       [description]
 	 */
 	push(batch) {
-		const db = new DB(this.path)
 		return batch.reduce((acc, entry) => {
-			return acc.then(() => db.push(
+			return acc.then(() => this.db.push(
 				{
 					id: uniqid(),
 					data: entry
@@ -24,7 +31,7 @@ class BatchQueue {
 			))
 		}, Promise.resolve())
 		.then(() => {
-			db.close().then(() =>  "done")
+			return "done"
 		})
 	}
 
@@ -37,8 +44,7 @@ class BatchQueue {
 	 * @return {[type]}          [description]
 	 */
 	pop(count, asyncJob) {
-		const db = new DB(this.path)
-		return db.get(count)
+		return this.db.get(count)
 		.then(results => {
 			// execute the batch job on the results
 			return asyncJob(results)
@@ -50,15 +56,10 @@ class BatchQueue {
 			let ids = results.reduce((acc, result, index) => {
 				return acc += '"' + result.id + '"' + ( index < results.length - 1 ? ', ' : '')
 			} , '')
-			return db.delete(ids).then(() => results)
+			return this.db.delete(ids).then(() => results)
 		})
 		.then(results => {
-			return db.close().then(() => results)
-		})
-		.catch(err => {
-			return db.close().then(() => {
-				throw err
-			})
+			return results
 		})
 	}
 
