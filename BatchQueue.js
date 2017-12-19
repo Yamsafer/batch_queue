@@ -1,4 +1,4 @@
-const DB = require('./db')
+const DB = require('./DB')
 const uniqid = require('uniqid')
 const schedule = require('node-schedule')
 let connections = {}
