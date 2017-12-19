@@ -1,6 +1,6 @@
 {
   "name": "batch_queue",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A queue for pushing tasks and then executing them in batches when needed. This is mostly helpful for cases where you want to accumulate items in one process and act on them in batches in a different process. For example, let's say you want to accumulate records that you want to later insert them in batches into a DB to reduce traffic/cost/...  ",
   "main": "BatchQueue.js",
   "scripts": {
