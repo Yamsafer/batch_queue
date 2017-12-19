@@ -1,6 +1,7 @@
 const DB = require('./db')
 const uniqid = require('uniqid')
 const schedule = require('node-schedule')
+let connections = {}
 
 class BatchQueue {
 
@@ -8,13 +9,13 @@ class BatchQueue {
 		this.db = new DB(dbPath)
 	}
 
-	static getSharedInstance(dbPath) {
-		if (typeof BatchQueue.instance === 'object') {
-			console.log('singleton')
-        	return BatchQueue.instance
-        }
-        BatchQueue.instance = new BatchQueue(dbPath)
-        return BatchQueue.instance
+	static getSharedConnection(dbPath) {
+		let queue = connections[dbPath]
+		if (!queue) {
+			queue = new BatchQueue(dbPath)
+			connections[dbPath] = queue
+		}
+		return queue
 	}
 	/**
 	 * add an array of items to the end of the queue

@@ -1,4 +1,4 @@
-const queue = require('../BatchQueue').getSharedInstance('./database.sqlite')
+const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
 
 const batch = [
 	{udid: '1', timestamp: Date.now()},

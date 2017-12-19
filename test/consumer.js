@@ -1,15 +1,15 @@
-const queue = require('../BatchQueue').getSharedInstance('./database.sqlite')
+const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
 
-queue.schedule(heavyDutyJob, 10, 1, (results) => {
-	console.log(results)
-}, (err) => {
-	console.log(err)
-})
-
-// queue.pop(100, heavyDutyJob)
-// .then(items => {
-// 	console.log(items)
+// queue.schedule(heavyDutyJob, 10, 1, (results) => {
+// 	console.log(results)
+// }, (err) => {
+// 	console.log(err)
 // })
+
+queue.pop(100, heavyDutyJob)
+.then(items => {
+	console.log(items)
+})
 
 
 function heavyDutyJob(results) {
