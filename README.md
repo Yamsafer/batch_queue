@@ -16,7 +16,7 @@ A queue for pushing tasks and then executing them in batches when needed. This i
 
 ### Example
 ```javascript
-const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
+const queue = require('batch_queue').getSharedConnection('./database.sqlite')
 queue.push([{
 	id: '12345'
 	name: 'taweel',
@@ -43,7 +43,7 @@ queue.schedule((data) => {
 ## PUSH
 `push(batch)` pushes an array of items to the queue. returns a promise that resolves to `'done'` if the push was successful
 ```javascript
-const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
+const queue = require('batch_queue').getSharedConnection('./database.sqlite')
 const batch = [
 	{udid: '1', timestamp: Date.now()},
 	{udid: '2', timestamp: Date.now()},
@@ -69,7 +69,7 @@ queue.push(batch)
 `pop(count, asyncJob)` Executes the given asyncJob on the items from 0-to-count, if the asyncJob was successful it
 then deletes those items from the queue and return prmoise that resolves to the poped items
 ```javascript
-const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
+const queue = require('batch_queue').getSharedConnection('./database.sqlite')
 
  queue.pop(100, heavyDutyJob)
  .then(items => {
@@ -94,7 +94,7 @@ mintues on a batch of items defined by (forBatchCount) that will be poped from t
 only if the asyncJob succeeds. onSuccess will be called after completion with the list of poped items, onFail will be called
 whenever an error occuers, the error given as arguemnt
 ```javascript
-const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
+const queue = require('batch_queue').getSharedConnection('./database.sqlite')
 
 queue.schedule(heavyDutyJob, 5, 1, (results) => {
 	console.log(results)
