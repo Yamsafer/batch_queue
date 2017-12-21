@@ -37,7 +37,7 @@ class BatchQueue {
 	}
 
 	/**
-	 * Executes the given asyncJob on the items from 0-to-count
+	 * Executes the given asyncJob on the items from 0-to-count, if the asyncJob was successful it
 	 * then deletes those items from the queue and return prmoise that
 	 * resolves to the poped items
 	 * @param  {[type]} count    [description]
@@ -67,7 +67,9 @@ class BatchQueue {
 	/**
 	 * Schedule a given job (asyncJob) to run every given number of
 	 * mintues on a batch of items defined by (forBatchCount) 
-	 * that is poped from the queue if the asyncJob succeeds
+	 * that is poped from the queue. , those items are deleted only if the asyncJob succeeds.
+	 * onSuccess will be called after completion with the list of poped items.
+	 * onFail will be called whenever an error occuers, the error given as arguemnt
 	 * @param  {[type]} asyncJob      [description]
 	 * @param  {[type]} forBatchCount [description]
 	 * @param  {[type]} everyMins     [description]

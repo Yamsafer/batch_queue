@@ -1,10 +1,48 @@
 # batch_queue
-A queue for pushing tasks and then executing them in batches when needed. This is mostly helpful for cases where you want to accumulate items in one process and act on them in batches in a different process. For example, let's say you want to accumulate records that you want to later insert them in batches into a DB to reduce traffic/cost/...  
+A queue for pushing tasks and then executing them in batches when needed. This is mostly helpful for cases where you want to accumulate items in one process and act on them in batches in a different process. For example, let's say you want to accumulate records that you want to later insert them in batches into a DB to reduce traffic/cost/... 
+
+## Simplest SQLite Queue
+..* Persistent (SQLite) 
+..* Batch processing
+..* Shared connection to sqlite file
+..* Pushing bulk of items or single item at a time
+..* Poping items as needed
+..* FIFO
+..* Promises
+..* Built-in cron like scheduling
+
+### Install (via npm)
+`npm install --save batch_queue`
+
+### Example
+```javascript
+const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
+queue.push([{
+	id: '12345'
+	name: 'taweel',
+	sent_at: Date.now()
+}]
+// schedule the queue to pop 5 items every 1 minute and perform some task on them
+queue.schedule((data) => {
+	//asyncJob
+	return new Promise((resolve, reject) => {
+		data.forEach(item => {
+			console.log(item)
+		})
+		resolve("done")
+	}
+}, 5, 1, (results) => {
+	// onSuccess
+	console.log(results)
+}, (err) => {
+	// onFail
+	console.log(err)
+})
 
 ## PUSH
+`push(batch)` pushes an array of items to the queue. returns a promise that resolves to `'done'` if the push was successful
 ```javascript
-const BatchQueue = require('batch_queue')
-const queue = new BatchQueue('./database.sqlite')
+const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
 const batch = [
 	{udid: '1', timestamp: Date.now()},
 	{udid: '2', timestamp: Date.now()},
@@ -21,12 +59,16 @@ const batch = [
 ]
 
 queue.push(batch)
+.then(result => {
+	console.log(result)
+})
 ```
 
 ## POP
+`pop(count, asyncJob)` Executes the given asyncJob on the items from 0-to-count, if the asyncJob was successful it
+then deletes those items from the queue and return prmoise that resolves to the poped items
 ```javascript
-const BatchQueue = require('batch_queue')
-const queue = new BatchQueue('./database.sqlite')
+const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
 
  queue.pop(100, heavyDutyJob)
  .then(items => {
@@ -46,9 +88,12 @@ function heavyDutyJob(results) {
 ```
 
 ## SCHEDULE
+`schedule(asyncJob, forBatchCount, everyMins, onSuccess, onFail)` Schedule a given job (asyncJob) to run every given number of
+mintues on a batch of items defined by (forBatchCount) that will be poped from the queue, those items are deleted
+only if the asyncJob succeeds. onSuccess will be called after completion with the list of poped items, onFail will be called
+whenever an error occuers, the error given as arguemnt
 ```javascript
-const BatchQueue = require('batch_queue')
-const queue = new BatchQueue('./database.sqlite')
+const queue = require('../BatchQueue').getSharedConnection('./database.sqlite')
 
 queue.schedule(heavyDutyJob, 5, 1, (results) => {
 	console.log(results)
