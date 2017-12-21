@@ -2,14 +2,14 @@
 A queue for pushing tasks and then executing them in batches when needed. This is mostly helpful for cases where you want to accumulate items in one process and act on them in batches in a different process. For example, let's say you want to accumulate records that you want to later insert them in batches into a DB to reduce traffic/cost/... 
 
 ## Simplest SQLite Queue
-..* Persistent (SQLite) 
-..* Batch processing
-..* Shared connection to sqlite file
-..* Pushing bulk of items or single item at a time
-..* Poping items as needed
-..* FIFO
-..* Promises
-..* Built-in cron like scheduling
+* Persistent (SQLite) 
+* Batch processing
+* Shared connection to sqlite file
+* Pushing bulk of items or single item at a time
+* Poping items as needed
+* FIFO
+* Promises
+* Built-in cron like scheduling
 
 ### Install (via npm)
 `npm install --save batch_queue`
@@ -38,6 +38,7 @@ queue.schedule((data) => {
 	// onFail
 	console.log(err)
 })
+```
 
 ## PUSH
 `push(batch)` pushes an array of items to the queue. returns a promise that resolves to `'done'` if the push was successful
